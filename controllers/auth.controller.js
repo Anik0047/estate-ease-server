@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt" // user password should be hash. so bcrypt help the password to be hash password.
 
 export const register = async (request, response) => {
 
