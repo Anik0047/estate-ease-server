@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json())
 
 // app.use("/app/posts", postRoute) 
-app.use("/app/auth", authRoute) 
+app.use("/index/auth", authRoute) 
 
 app.listen(8800, ()=> {
     console.log("Server is running!!");

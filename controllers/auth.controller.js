@@ -15,6 +15,10 @@ export const register = async (request, response) => {
 
 export const login = (request, response) => {
     // db operations
+
+    console.log(request.body)
+    
+    response.send("OK")
 }
 
 export const logout = (request, response) => {
