@@ -70,5 +70,7 @@ export const login = async (request, response) => {
 }
 
 export const logout = (request, response) => {
+
+    response.send("ok")
     // db operations
 }
