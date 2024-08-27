@@ -1,0 +1,76 @@
+This code snippet is a Prisma schema that defines the configuration for a Prisma Client and a MongoDB database connection. It also defines a 'User' model representing a collection in the MongoDB database. Here's a breakdown of each part:
+
+1. Prisma Client Generator
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+* `generator client`: This block specifies that Prisma should generate a client (a set of auto-generated functions) that you can use in your JavaScript or TypeScript application to interact with your database.
+
+* `provider = "prisma-client-js"`: This line indicates that Prisma should generate a client for JavaScript/TypeScript (prisma-client-js).
+
+2. Datasource Configuration
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+* `datasource db`: This block defines the database connection configuration.
+* `provider = "mongodb"`: This line specifies that the database provider is MongoDB.
+* `url = env("DATABASE_URL")`: This line tells Prisma to use the DATABASE_URL environment variable (which contains the MongoDB connection string) to connect to the database.
+
+3. User Model
+
+model User {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  email       String   @unique
+  username    String   @unique
+  password    String
+  avatar      String?
+  createdAt   DateTime @default(now())
+}
+
+This block defines a User model, which represents a MongoDB collection. Here's what each field represents:
+
+* id String @id @default(auto()) @map("_id") @db.ObjectId:
+
+	* id: The primary key of the User model.
+	* String: The data type of the id field is a string.
+	* @id: This annotation marks id as the primary key of the model.
+	* @default(auto()): This sets the default value to an automatically generated value (e.g., an ObjectId).
+	* @map("_id"): This maps the id field to MongoDB's _id field, which is the default primary key field in MongoDB.
+	* @db.ObjectId: This specifies that the field should be stored as an ObjectId in MongoDB.
+
+* email String @unique:
+
+	* The email field is a string and must be unique across the collection.
+
+* username String @unique:
+
+	*The username field is also a string and must be unique.
+
+* password String:
+
+	*The password field is a string that stores the user's password.
+
+* avatar String?:
+
+	*The avatar field is an optional string (String? means it can be null) that could store a URL or path to the user's avatar image.
+
+* createdAt DateTime @default(now()):
+
+	* The createdAt field stores the date and time when the user was created.
+
+* @default(now()): 
+	
+	* This sets the default value to the current date and time when a new user is created.
+
+
+
+Summary
+This schema allows Prisma to generate a client for interacting with a MongoDB database, where the User model represents a collection with fields for id, email, username, password, avatar, and createdAt. The id field is mapped to MongoDB's _id field and stored as an ObjectId, while email and username fields must be unique.
+
+
+
