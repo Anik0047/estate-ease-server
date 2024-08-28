@@ -73,7 +73,7 @@ export const login = async (request, response) => {
         httpOnly: true,
         // secure: true,
         maxAge: age,
-    }).status(200).json({ message: "Login Successfully" })
+    }).status(200).json({ message: "Login Successful" })
 
     } catch (error){
 
@@ -85,5 +85,7 @@ export const login = async (request, response) => {
 }
 
 export const logout = (request, response) => {
-    // db operations
+    
+    response.clearCookie("token").status(200).json({ message: "Logout Successful" })
+
 }
