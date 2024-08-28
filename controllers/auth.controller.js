@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt" // user password should be hash. so bcrypt help the password to be hash password.
+import jwt from "jsonwebtoken"
 import prisma from "../lib/prisma.js"
 
 export const register = async (request, response) => {
@@ -60,6 +61,20 @@ export const login = async (request, response) => {
 
     // Generate cookie token and send to the user
 
+    // response.setHeader("Set-Cookie", "test=" + "myValue0047").json("success!!")
+
+    const age = 1000 * 60 * 60 * 24* 3;
+
+    const token = jwt.sign({
+        id:user.id
+    }, process.env.JWT_SECRET_KEY, {expiresIn: age})
+
+    response.cookie("token", token, {
+        httpOnly: true,
+        // secure: true,
+        maxAge: age,
+    }).status(200).json({ message: "Login Successfully" })
+
     } catch (error){
 
         console.log(error)
@@ -70,7 +85,5 @@ export const login = async (request, response) => {
 }
 
 export const logout = (request, response) => {
-
-    response.send("ok")
     // db operations
 }
