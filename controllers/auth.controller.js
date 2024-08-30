@@ -33,7 +33,7 @@ export const register = async (request, response) => {
 
     console.log(error);
 
-    response.status(500).json({ message: "Failed to create user!" })
+    response.status(500).json({ message: "Failed to create user !" })
 }
 }
 
@@ -66,20 +66,23 @@ export const login = async (request, response) => {
     const age = 1000 * 60 * 60 * 24* 3;
 
     const token = jwt.sign({
-        id:user.id
+        id:user.id,
+        isAdmin: false
     }, process.env.JWT_SECRET_KEY, {expiresIn: age})
+
+    const {password: userPassword, ...userInfo} = user
 
     response.cookie("token", token, {
         httpOnly: true,
         // secure: true,
         maxAge: age,
-    }).status(200).json({ message: "Login Successful" })
+    }).status(200).json(userInfo)
 
     } catch (error){
 
         console.log(error)
 
-        response.status(500).json({ message: "Failed to login!" })
+        response.status(500).json({ message: "Failed to login !" })
     }
 
 }
