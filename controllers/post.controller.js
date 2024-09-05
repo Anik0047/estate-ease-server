@@ -123,20 +123,20 @@ export const deletePosts = async (request, response) => {
         })
 
         if(post.userId !== tokenUserId) {
-            return response.status(403).json({ message: "Not Authorized" })
+            return response.status(403).json({ message: "Not Authorized!" })
         }
 
         await prisma.post.delete({
             where:{id}
         })
 
-        response.status(200).json({ message: "Post Deleted" })
+        response.status(200).json({ message: "Post Deleted!" })
 
     }catch(error){
 
         console.log(error)
 
-        response.status(500).json({ message: "Failed to delete post" })
+        response.status(500).json({ message: "Failed to delete post!" })
 
     }
 
