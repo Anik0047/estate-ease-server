@@ -136,7 +136,7 @@ export const deletePosts = async (request, response) => {
 
         console.log(error)
 
-        response.status(500).json({ message: "Failed to delete post" })
+        response.status(500).json({ message: "Failed to Delete Post" })
 
     }
 
