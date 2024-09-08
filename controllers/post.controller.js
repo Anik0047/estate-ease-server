@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma.js"
+import jwt from "jsonwebtoken";
 
 export const getPosts = async (request, response) => {
 
@@ -32,35 +33,61 @@ export const getPosts = async (request, response) => {
 
 
 export const getPost = async (request, response) => {
+    const id = request.params.id;
 
-    const id = request.params.id
-
-    try{
-
+    try {
+        // Find the post
         const post = await prisma.post.findUnique({
-            where:{id},
+            where: { id },
             include: {
                 postDetail: true,
                 user: {
-                    select:{
+                    select: {
                         username: true,
-                        avatar: true
-                    }
+                        avatar: true,
+                    },
+                },
+            },
+        });
+
+        // Check if the post exists
+        if (!post) {
+            return response.status(404).json({ message: "Post not found" });
+        }
+
+        // Retrieve the token from cookies
+        const token = request.cookies?.token;
+
+        if (token) {
+            jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
+                if (err) {
+                    return response.status(401).json({ message: "Invalid token" });
                 }
-            }
-        })
 
-        response.status(200).json(post)
+                // Find saved post for the authenticated user
+                const saved = await prisma.savedPost.findUnique({
+                    where: {
+                        userId_postId: {
+                            postId: id,
+                            userId: payload.id,
+                        },
+                    },
+                });
 
-    }catch(error){
+                // Respond with post data and whether it's saved by the user
+                response.status(200).json({ ...post, isSaved: saved ? true : false });
 
-        console.log(error)
-
-        response.status(500).json({ message: "Failed to get post" })
-
+            });
+        } else {
+            // If no token is provided, respond without saved status
+            return response.status(200).json({ ...post, isSaved: false });
+        }
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({ message: "Failed to get post" });
     }
+};
 
-}
 
 export const addPost = async (request, response) => {
 
