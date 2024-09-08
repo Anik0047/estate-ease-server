@@ -51,9 +51,9 @@ export const getPost = async (request, response) => {
         });
 
         // Check if the post exists
-        if (!post) {
-            return response.status(404).json({ message: "Post not found" });
-        }
+        // if (!post) {
+        //     return response.status(404).json({ message: "Post not found" });
+        // }
 
         // Retrieve the token from cookies
         const token = request.cookies?.token;
